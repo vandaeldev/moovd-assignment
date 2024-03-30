@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -45,4 +46,12 @@ model User {
   password  String   @db.NVarChar(32)
   createdAt DateTime @default(now())
   updatedAt DateTime
+}
+
+view ViewActivity {
+  id         Int      @unique
+  timestamp  DateTime
+  deviceID   String?  @db.NVarChar(6)
+  deviceType String?  @db.NVarChar(8)
+  location   String?  @db.NVarChar(2)
 }
