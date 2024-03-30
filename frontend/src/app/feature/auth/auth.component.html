@@ -1,0 +1,10 @@
+<main class="bullseye h-full">
+  <form class="bullseye gap-4" [formGroup]="authForm">
+    <input type="email" class="input" formControlName="email">
+    <input type="password" class="input" formControlName="password">
+    <div class="flex justify-center gap-4">
+      <button [disabled]="!authForm.valid" (click)="onLogin()">Login</button>
+      <button [disabled]="!authForm.valid" (click)="onSignup()">Signup</button>
+    </div>
+  </form>
+</main>

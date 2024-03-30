@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .input {
+    @apply rounded-md outline-none border-none shadow-lg p-2;
+  }
+}
+
+@layer utilities {
+  .bullseye {
+    @apply grid items-center justify-center;
+  }
+}
