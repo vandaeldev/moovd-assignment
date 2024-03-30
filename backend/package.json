@@ -14,7 +14,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "seed": "pnpm dlx tsx prisma/seed.ts"
   },
   "keywords": [],
   "author": "Dominic van Dael <vandael.dev@gmail.com>",

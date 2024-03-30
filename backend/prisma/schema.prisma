@@ -8,23 +8,23 @@ datasource db {
 }
 
 model Activity {
-  id         Int      @id @default(autoincrement())
-  deviceID   String   @db.NVarChar(6)
-  deviceType String   @db.NVarChar(8)
-  location   String   @db.NVarChar(2)
-  timestamp  DateTime @default(now())
-  Device     Device   @relation(fields: [deviceID, deviceType], references: [name, type])
-  Location   Location @relation(fields: [location], references: [name])
+  id           Int      @id @default(autoincrement())
+  deviceID     Int
+  deviceTypeID Int
+  locationID   Int
+  timestamp    DateTime @default(now())
+  Device       Device   @relation(fields: [deviceID, deviceTypeID], references: [id, typeID])
+  Location     Location @relation(fields: [locationID], references: [id])
 }
 
 model Device {
   id         Int        @id @default(autoincrement())
   name       String     @unique @db.NVarChar(6)
-  type       String     @db.NVarChar(8)
+  typeID     Int
   Activity   Activity[]
-  DeviceType DeviceType @relation(fields: [type], references: [name])
+  DeviceType DeviceType @relation(fields: [typeID], references: [id])
 
-  @@unique([name, type])
+  @@unique([id, typeID])
 }
 
 model DeviceType {
