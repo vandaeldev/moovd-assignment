@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Activity {
+  id         Int      @id @default(autoincrement())
+  deviceID   String   @db.NVarChar(6)
+  deviceType String   @db.NVarChar(8)
+  location   String   @db.NVarChar(2)
+  timestamp  DateTime @default(now())
+  Device     Device   @relation(fields: [deviceID, deviceType], references: [name, type])
+  Location   Location @relation(fields: [location], references: [name])
+}
+
+model Device {
+  id         Int        @id @default(autoincrement())
+  name       String     @unique @db.NVarChar(6)
+  type       String     @db.NVarChar(8)
+  Activity   Activity[]
+  DeviceType DeviceType @relation(fields: [type], references: [name])
+
+  @@unique([name, type])
+}
+
+model DeviceType {
+  id     Int      @id @default(autoincrement())
+  name   String   @unique @db.NVarChar(8)
+  Device Device[]
+}
+
+model Location {
+  id       Int        @id @default(autoincrement())
+  name     String     @unique @db.NVarChar(2)
+  Activity Activity[]
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @db.NVarChar(255)
+  password  String   @db.NVarChar(32)
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
