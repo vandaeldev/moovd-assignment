@@ -42,16 +42,17 @@ model Location {
 
 model User {
   id        Int      @id @default(autoincrement())
-  email     String   @db.NVarChar(255)
-  password  String   @db.NVarChar(32)
+  email     String   @unique @db.NVarChar(255)
+  username  String   @unique @db.NVarChar(255)
+  password  String   @db.NVarChar(60)
   createdAt DateTime @default(now())
   updatedAt DateTime
 }
 
 view ViewActivity {
   id         Int      @unique
-  timestamp  DateTime
   deviceID   String?  @db.NVarChar(6)
   deviceType String?  @db.NVarChar(8)
+  timestamp  DateTime
   location   String?  @db.NVarChar(2)
 }

@@ -1,14 +1,15 @@
 #!/usr/bin/env tsx
 
+import { exit } from 'node:process';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { PrismaClient } from '@prisma/client';
-import mssql, { type IResult } from 'mssql';
+import { type IResult } from 'mssql';
 import data from './data.json';
+import { constructActivityData } from '../src/util/helpers.js';
+import { getMssqlPool, getPrismaClient } from './client.js';
 
-const client = new PrismaClient();
-const mssqlPool = new mssql.ConnectionPool(process.env.MSSQL_CONN!);
-await mssqlPool.connect();
+await using prismaDB = getPrismaClient();
+await using mssqlDB = await getMssqlPool();
 
 const createViews = async () => {
   const viewFolder = join(import.meta.dirname, 'views', 'dbo');
@@ -18,38 +19,16 @@ const createViews = async () => {
     if (ext !== 'sql') return acc;
     const sql = readFileSync(join(viewFolder, filename), 'utf8');
     const query = `CREATE OR ALTER VIEW [dbo].[${filename.replace('.sql', '')}] AS ${sql}`;
-    return acc.concat(mssqlPool.query(query));
+    return acc.concat(mssqlDB.client.query(query));
   }, []);
   return Promise.all(viewQueries);
 };
 
 const createActivity = () => {
-  const activity = data.map(a => client.activity.create({
-    data: {
-      Device: {
-        connectOrCreate: {
-          create: {
-            name: a.deviceId,
-            DeviceType: {
-              connectOrCreate: {
-                create: {name: a.deviceType},
-                where: {name: a.deviceType}
-              }
-            }
-          },
-          where: {name: a.deviceId}
-        }
-      },
-      Location: {
-        connectOrCreate: {
-          create: {name: a.location},
-          where: {name: a.location}
-        }
-      },
-      timestamp: new Date(a.timestamp)
-    }
+  const activity = data.map(a => prismaDB.client.activity.create({
+    data: constructActivityData(a)
   }));
-  return client.$transaction(activity);
+  return prismaDB.client.$transaction(activity);
 };
 
 try {
@@ -59,8 +38,5 @@ try {
   ]);
 } catch (e) {
   console.error(e);
-  process.exit(1);
-} finally {
-  client.$disconnect();
-  mssqlPool.close();
+  exit(1);
 }
