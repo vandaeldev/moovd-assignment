@@ -1,15 +1,19 @@
 import { Type } from '@sinclair/typebox';
 import { StatusCodes } from 'http-status-codes';
-import { PROBLEM_TYPE_URL } from './constants.js';
+import { JWT, PROBLEM_TYPE_URL } from './constants.js';
 
 export const UserBody = Type.Object({
-  username: Type.String(),
+  username: Type.String({minLength: 8, maxLength: 32}),
   email: Type.String({format: 'email'}),
-  password: Type.String()
+  password: Type.String({minLength: 8, maxLength: 32})
 }, {maxProperties: 3});
 
 export const UserID = Type.Object({
-  id: Type.Integer()
+  id: Type.Integer({minimum: 1})
+});
+
+export const LoginResponse = Type.Object({
+  token: Type.String({pattern: JWT.REGEX})
 });
 
 export const LoginBody = Type.Omit(UserBody, ['email']);
@@ -17,14 +21,14 @@ export const LoginBody = Type.Omit(UserBody, ['email']);
 export const UserPatchBody = Type.Composite([UserID, Type.Partial(Type.Omit(UserBody, ['password']))]);
 
 export const ActivityBody = Type.Object({
-  deviceID: Type.String(),
-  deviceType: Type.String(),
-  timestamp: Type.String(),
-  location: Type.String()
+  deviceID: Type.String({pattern: '^D-\\d{4}$'}),
+  deviceType: Type.String({minLength: 2, maxLength: 8}),
+  timestamp: Type.String({format: 'date-time'}),
+  location: Type.String({minLength: 2, maxLength: 2})
 });
 
 export const ActivityID = Type.Object({
-  id: Type.Integer()
+  id: Type.Integer({minimum: 1})
 });
 
 export const Activity = Type.Composite([ActivityBody, ActivityID]);

@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { constructActivityData } from './helpers.js';
-import type { TActivityBody } from '../types.js';
+import type { TActivityBody } from '../types.d.ts';
 
 let client: PrismaClient;
 

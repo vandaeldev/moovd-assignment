@@ -1,18 +1,19 @@
 import { compare, hash } from 'bcrypt';
 import { StatusCodes } from 'http-status-codes';
 import { deleteActivity, deleteUser, getActivity, getActivityById, getExistingUsers, getUserById, getUserByName, patchUser, postActivity, postUser, putActivity } from './util/db.js';
-import { Activity, ActivityArray, ActivityBody, ActivityID, LoginBody, RequestError, UserBody, UserID, UserPatchBody } from './util/validation.js';
+import { Activity, ActivityArray, ActivityBody, ActivityID, LoginBody, LoginResponse, RequestError, UserBody, UserID, UserPatchBody } from './util/validation.js';
 import { CT_PROBLEM_JSON, PROBLEM_TYPE_URL } from './util/constants.js';
-import type { FastifyPluginCallback } from 'fastify';
+import type { FastifyInstance, FastifyPluginCallback } from 'fastify';
 import type { Activity as TActivity, User as TUser, ViewActivity } from '@prisma/client';
-import type { IRequestError, TActivityBody } from './types.d.ts';
+import type { IRequestError, TActivityBody, TWithAuth } from './types.d.ts';
 
-export default ((app, _, done) => {
+export default ((app: TWithAuth<FastifyInstance>, _, done) => {
   app.route<{ Reply: ViewActivity[] }>({
     method: 'GET',
     url: '/activity',
+    onRequest: [app.auth!],
     schema: { response: { [StatusCodes.OK]: ActivityArray } },
-    handler: async (_, res) => {
+    handler: async (req, res) => {
       const activity = await getActivity();
       res.send(activity);
     }
@@ -21,6 +22,7 @@ export default ((app, _, done) => {
   app.route<{ Params: Pick<ViewActivity, 'id'>, Reply: ViewActivity }>({
     method: 'GET',
     url: '/activity/:id',
+    onRequest: [app.auth!],
     schema: { params: ActivityID, response: { [StatusCodes.OK]: Activity } },
     handler: async (req, res) => {
       const activity = await getActivityById(+req.params.id);
@@ -31,6 +33,7 @@ export default ((app, _, done) => {
   app.route<{ Body: TActivityBody, Reply: Pick<TActivity, 'id'> }>({
     method: 'POST',
     url: '/activity',
+    onRequest: [app.auth!],
     schema: { body: ActivityBody, response: { [StatusCodes.CREATED]: ActivityID } },
     handler: async (req, res) => {
       const activityId = await postActivity(req.body);
@@ -41,6 +44,7 @@ export default ((app, _, done) => {
   app.route<{ Params: Pick<ViewActivity, 'id'>, Body: TActivityBody, Reply: Pick<TActivity, 'id'> }>({
     method: 'PUT',
     url: '/activity/:id',
+    onRequest: [app.auth!],
     schema: { params: ActivityID, body: ActivityBody, response: { [StatusCodes.OK]: ActivityID } },
     handler: async (req, res) => {
       const activityId = await putActivity(+req.params.id, req.body);
@@ -51,6 +55,7 @@ export default ((app, _, done) => {
   app.route<{ Params: Pick<ViewActivity, 'id'>, Reply: Pick<TActivity, 'id'> }>({
     method: 'DELETE',
     url: '/activity/:id',
+    onRequest: [app.auth!],
     schema: { params: ActivityID, response: { [StatusCodes.OK]: ActivityID } },
     handler: async (req, res) => {
       const activityId = await deleteActivity(+req.params.id);
@@ -78,25 +83,29 @@ export default ((app, _, done) => {
     }
   });
 
-  app.route<{ Body: Pick<TUser, 'username' | 'password'>, Reply: Pick<TUser, 'id'> }>({
+  app.route<{ Body: Pick<TUser, 'username' | 'password'>, Reply: { token: string } }>({
     method: 'POST',
     url: '/login',
-    schema: { body: LoginBody, response: { [StatusCodes.OK]: UserID } },
+    schema: { body: LoginBody, response: { [StatusCodes.OK]: LoginResponse } },
     handler: async (req, res) => {
       const { username, password } = req.body;
       const user = await getUserByName(username);
       if (!user) return void res.callNotFound();
       const match = await compare(password, user.password);
-      match ? res.send({ id: user.id }) : res.callNotFound();
+      if (!match) return void res.callNotFound();
+      const token = app.jwt.sign({ id: user.id });
+      res.send({ token });
     }
   });
 
   app.route<{ Body: Partial<Pick<TUser, 'email' | 'username'>> & Pick<TUser, 'id'>, Reply: Pick<TUser, 'id'> }>({
     method: 'PATCH',
     url: '/user',
+    onRequest: [app.auth!],
     schema: { body: UserPatchBody, response: { [StatusCodes.OK]: UserID } },
     handler: async (req, res) => {
       const { id, ...userData } = req.body;
+      if ((req.user as Record<string, any>).id !== +id) return void res.callNotFound();
       const user = await getUserById(+id!);
       if (!user) return void res.callNotFound();
       const userId = await patchUser(+id!, userData);
@@ -107,9 +116,11 @@ export default ((app, _, done) => {
   app.route<{ Params: Pick<TUser, 'id'>, Reply: Pick<TUser, 'id'> }>({
     method: 'DELETE',
     url: '/user/:id',
+    onRequest: [app.auth!],
     schema: { params: UserID, response: { [StatusCodes.OK]: UserID } },
     handler: async (req, res) => {
       const { id } = req.params;
+      if ((req.user as Record<string, any>).id !== +id) return void res.callNotFound();
       const user = await getUserById(+id);
       if (!user) return void res.callNotFound();
       const userId = await deleteUser(+id);

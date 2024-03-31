@@ -1,6 +1,4 @@
-import { ORIGIN_REGEX } from './constants.js';
-import type { OriginFunction } from '@fastify/cors';
-import type { TActivityBody } from '../types.js';
+import type { TActivityBody } from '../types.d.ts';
 
 export const constructActivityData = ({ deviceID, deviceType, location, timestamp }: TActivityBody) => ({
   Device: {
