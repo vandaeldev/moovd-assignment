@@ -6,7 +6,7 @@ export const getPrismaClient = () => {
   const client = new PrismaClient();
   return {
     client,
-    [Symbol.asyncDispose]: async () => void await client?.$disconnect()
+    [Symbol.asyncDispose]: async () => await client?.$disconnect()
   };
 };
 
@@ -14,6 +14,6 @@ export const getMssqlPool = async () => {
   const client = await new mssql.ConnectionPool(env.MSSQL_CONN!).connect();
   return {
     client,
-    [Symbol.asyncDispose]: async () => void await client?.close()
+    [Symbol.asyncDispose]: async () => await client?.close()
   };
 };
