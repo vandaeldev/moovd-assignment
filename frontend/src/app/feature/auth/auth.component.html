@@ -1,10 +1,17 @@
 <main class="bullseye h-full">
-  <form class="bullseye gap-4" [formGroup]="authForm">
-    <input type="email" class="input" formControlName="email">
-    <input type="password" class="input" formControlName="password">
+  <form class="bullseye gap-4" [formGroup]="signup() ? signupForm : loginForm">
+    @if (signup()) {
+      <input type="email" class="input" formControlName="email" placeholder="Email">
+    }
+    <input class="input" formControlName="username" placeholder="{{ signup() ? 'Username' : 'Username / Email' }}">
+    <input type="password" class="input" formControlName="password" placeholder="Password">
     <div class="flex justify-center gap-4">
-      <button [disabled]="!authForm.valid" (click)="onLogin()">Login</button>
-      <button [disabled]="!authForm.valid" (click)="onSignup()">Signup</button>
+      @if (signup()) {
+        <button [disabled]="!signupForm.valid" (click)="onSignup()">Signup</button>
+      } @else {
+        <button [disabled]="!loginForm.valid" (click)="onLogin()">Login</button>
+      }
+      <a (click)="toggleSignup()">I want to {{ signup() ? 'login' : 'signup' }}</a>
     </div>
   </form>
 </main>
