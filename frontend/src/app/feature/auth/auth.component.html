@@ -1,17 +1,30 @@
 <main class="bullseye h-full">
-  <form class="bullseye gap-4" [formGroup]="signup() ? signupForm : loginForm">
-    @if (signup()) {
-      <input type="email" class="input" formControlName="email" placeholder="Email">
-    }
-    <input class="input" formControlName="username" placeholder="{{ signup() ? 'Username' : 'Username / Email' }}">
-    <input type="password" class="input" formControlName="password" placeholder="Password">
-    <div class="flex justify-center gap-4">
+  <div class="bullseye flex-col gap-8 w-1/2">
+    <p class="text-smoke-yellow font-bold text-3xl">{{ signup() ? 'Join us:' : 'Welcome back!' }}</p>
+    <form class="grid w-80 gap-4" [formGroup]="signup() ? signupForm : loginForm">
       @if (signup()) {
-        <button [disabled]="!signupForm.valid" (click)="onSignup()">Signup</button>
-      } @else {
-        <button [disabled]="!loginForm.valid" (click)="onLogin()">Login</button>
+        <div class="form-field">
+          <span class="material-symbols-outlined">alternate_email</span>
+          <input type="email" class="input" formControlName="email" placeholder="Email*">
+        </div>
       }
-      <a (click)="toggleSignup()">I want to {{ signup() ? 'login' : 'signup' }}</a>
-    </div>
-  </form>
+      <div class="form-field">
+        <span class="material-symbols-outlined">id_card</span>
+        <input class="input" formControlName="username" placeholder="{{ signup() ? 'Username*' : 'Username / Email' }}">
+      </div>
+      <div class="form-field">
+        <span class="material-symbols-outlined cursor-pointer" (click)="toggleVisibility()">{{ visible() ? 'lock_open_right' : 'lock' }}</span>
+        <input [type]="visible() ? 'text' : 'password'" class="input" formControlName="password" placeholder="Password*">
+      </div>
+      <div class="flex justify-between items-center w-full mt-4">
+        <button mat-raised-button color="primary" [disabled]="loading() || signup() ? !signupForm.valid : !loginForm.valid" (click)="signup() ? onSignup() : onLogin()">
+          @if (loading()) {
+            <mat-progress-spinner color="accent" diameter="20" mode="indeterminate"></mat-progress-spinner>
+          } @else { {{ signup() ? 'Sign Up' : 'Login' }} }
+        </button>
+        <a class="link" (click)="toggleSignup()">{{ signup() ? 'I have an account' : 'Don\'t have an account yet?' }}</a>
+      </div>
+    </form>
+  </div>
+  <div class="w-1/2"></div>
 </main>
