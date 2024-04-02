@@ -1,5 +1,5 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { API_URL, WITH_AUTH } from '@core/constants';
 import type { IActivity } from '@core/models';
 
@@ -9,8 +9,7 @@ import type { IActivity } from '@core/models';
 export class ActivityService {
   private readonly endpoint = 'activity';
   private readonly defHttpOpts = { context: new HttpContext().set(WITH_AUTH, true) };
-
-  constructor(private readonly httpClient: HttpClient) {}
+  private readonly httpClient = inject(HttpClient);
 
   public fetchActivity() {
     return this.httpClient.get<IActivity[]>(`${API_URL}/${this.endpoint}`, this.defHttpOpts);

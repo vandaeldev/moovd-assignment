@@ -1,5 +1,6 @@
 import { type AfterViewInit, ChangeDetectionStrategy, Component, signal, type OnInit, viewChild } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatRippleModule } from '@angular/material/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,7 +9,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { ActivityService } from '@core/services';
 import type { IActivity } from '@core/models';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-activity-overview',

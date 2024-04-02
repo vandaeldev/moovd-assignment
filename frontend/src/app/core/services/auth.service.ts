@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { concatMap, map } from 'rxjs';
-import { API_URL } from '../constants';
-import type { ILoginFormValue, ISignupFormValue } from '../models/form.model';
+import { API_URL } from '@core/constants';
+import type { ILoginFormValue, ISignupFormValue } from '@core/models';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class AuthService {
   private _isLoggedIn = signal(false);
   private _token = signal<string | null>(null);
 
-  constructor(private readonly httpClient: HttpClient) {}
+  private readonly httpClient = inject(HttpClient);
 
   public login(creds: ILoginFormValue) {
     return this.httpClient.post<{token: string}>(`${API_URL}/login`, creds).pipe(

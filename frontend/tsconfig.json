@@ -24,14 +24,17 @@
       "dom"
     ],
     "paths": {
-      "@src/*": [
-        "./src/*"
+      "@app/*": [
+        "./src/app/*"
       ],
       "@core/*": [
         "./src/app/core/*"
       ],
       "@feature/*": [
         "./src/app/feature/*"
+      ],
+      "@shared/*": [
+        "./src/app/shared/*"
       ]
     }
   },
