@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, type OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,7 +15,7 @@ import type { ILoginFormValue, ISignupFormValue } from '@core/models';
   templateUrl: './auth.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AuthComponent {
+export class AuthComponent implements OnInit {
   public signup = signal(false);
   public visible = signal(false);
   public loading = signal(false);
@@ -32,13 +32,21 @@ export class AuthComponent {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
 
+  public ngOnInit() {
+    if (this.authService.isLoggedIn()) this.authService.logout();
+  }
+
   public onLogin() {
     if (this.loading()) return;
     this.loading.set(true);
     const formValue = this.loginForm.value as ILoginFormValue;
     this.authService.login(formValue)
       .pipe(finalize(() => this.loading.set(false)))
-      .subscribe(() => void this.router.navigate(['/activity']));
+      .subscribe(() => {
+        const url = this.authService.requestedURL() || '/activity';
+        this.router.navigate([url]);
+        this.authService.requestedURL.set(null);
+      });
   }
 
   public onSignup() {

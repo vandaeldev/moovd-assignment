@@ -11,6 +11,7 @@ import type { ILoginFormValue, ISignupFormValue } from '@core/models';
 export class AuthService {
   public isLoggedIn = computed(() => this._isLoggedIn() || window.sessionStorage.getItem('isLoggedIn') === 'true');
   public token = computed(() => this._token() || window.sessionStorage.getItem('token'));
+  public requestedURL = signal<string | null>(null);
 
   private _isLoggedIn = signal(false);
   private _token = signal<string | null>(null);
@@ -37,10 +38,10 @@ export class AuthService {
 
   public logout() {
     this.httpClient.get(`${API_URL}/logout`).subscribe(() => {
-      this._token.set(null);
-      this._isLoggedIn.set(false);
       window.sessionStorage.removeItem('isLoggedIn');
       window.sessionStorage.removeItem('token');
+      this._token.set(null);
+      this._isLoggedIn.set(false);
       this.router.navigate(['/login']);
     });
   }

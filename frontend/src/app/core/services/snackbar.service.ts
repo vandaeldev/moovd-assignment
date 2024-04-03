@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
+import { SnackbarComponent } from '@shared/components';
 import { ESnackbarType } from '@core/enums';
 import { SNACKBAR_CLASS } from '../constants';
 
@@ -14,7 +14,7 @@ export class SnackbarService {
     const bgClass = SNACKBAR_CLASS.get(type) || '';
     return this.snackbar.openFromComponent(SnackbarComponent, {
       verticalPosition: 'bottom',
-      horizontalPosition: 'end',
+      horizontalPosition: 'center',
       duration,
       panelClass: 'snackbar',
       data: { message, bgClass }
