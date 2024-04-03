@@ -1,6 +1,6 @@
 SELECT
   a.id,
-  d.name AS deviceID,
+  d.name AS device,
   dt.name AS deviceType,
   timestamp,
   l.name AS location

@@ -21,7 +21,7 @@ export interface IActivityReply {
 }
 
 export interface IActivityDetail {
-  deviceID: string;
+  device: string;
   deviceType: string;
   timeAt: ILocationTime[];
   totalTime: number;

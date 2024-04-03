@@ -34,15 +34,15 @@ export default ((app: TWithAuth<FastifyInstance>, _, done) => {
     }
   });
 
-  app.route<{ Params: Pick<ViewActivity, 'deviceID'>, Reply: IActivityDetail | [] }>({
+  app.route<{ Params: Pick<ViewActivity, 'device'>, Reply: IActivityDetail | [] }>({
     method: 'GET',
-    url: '/activity/:deviceID',
+    url: '/activity/:device',
     onRequest: [app.auth!],
     schema: { params: ActivityName, response: { [StatusCodes.OK]: ActivityDetail || Type.Array } },
     handler: async (req, res) => {
-      const activity = await getActivityFilter({ deviceID: req.params.deviceID });
+      const activity = await getActivityFilter({ device: req.params.device });
       if (!activity) return void res.callNotFound();
-      const activityDetail = toActivityDetail(req.params.deviceID, activity);
+      const activityDetail = toActivityDetail(req.params.device, activity);
       res.send(activityDetail);
     }
   });

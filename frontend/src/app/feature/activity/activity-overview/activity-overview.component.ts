@@ -1,5 +1,5 @@
 import { type AfterViewInit, ChangeDetectionStrategy, Component, signal, type OnInit, viewChild, inject } from '@angular/core';
-import { TitleCasePipe } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatRippleModule } from '@angular/material/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -7,19 +7,34 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { finalize } from 'rxjs';
 import { ActivityService } from '@core/services';
+import { DecamelizePipe } from '@shared/pipes';
 import type { IActivity } from '@core/models';
 
 @Component({
   selector: 'app-activity-overview',
   standalone: true,
-  imports: [MatTableModule, MatFormFieldModule, MatPaginatorModule, MatInputModule, MatSortModule, MatRippleModule, TitleCasePipe],
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatPaginatorModule,
+    MatInputModule,
+    MatSortModule,
+    MatRippleModule,
+    TitleCasePipe,
+    MatProgressSpinnerModule,
+    DecamelizePipe
+  ],
   templateUrl: './activity-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ActivityOverviewComponent implements OnInit, AfterViewInit {
   public displayedColumns = signal([] as (keyof IActivity)[]);
   public dataSource = new MatTableDataSource([] as IActivity[]);
+  public loading = signal(true);
 
   private readonly router = inject(Router);
   private readonly activityService = inject(ActivityService);
@@ -27,7 +42,9 @@ export class ActivityOverviewComponent implements OnInit, AfterViewInit {
   private readonly sort = viewChild.required(MatSort);
 
   public ngOnInit() {
-    this.activityService.fetchActivityLatest().subscribe(({ columns, data }) => {
+    this.activityService.fetchActivityLatest().pipe(
+      finalize(() => this.loading.set(false))
+    ).subscribe(({ columns, data }) => {
       this.displayedColumns.set(columns.filter(c => c !== 'id'));
       this.dataSource.data = data;
     });
@@ -40,7 +57,6 @@ export class ActivityOverviewComponent implements OnInit, AfterViewInit {
 
   public applyFilter(evt: Event) {
     const { value } = evt.target as HTMLInputElement;
-    console.log(value);
     this.dataSource.filter = value.trim().toLowerCase();
     this.dataSource.paginator?.firstPage();
   }

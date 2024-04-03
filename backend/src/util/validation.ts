@@ -21,7 +21,7 @@ export const LoginBody = Type.Omit(UserBody, ['email']);
 export const UserPatchBody = Type.Composite([UserID, Type.Partial(Type.Omit(UserBody, ['password']))]);
 
 export const ActivityBody = Type.Object({
-  deviceID: Type.String({pattern: '^D-\\d{4}$'}),
+  device: Type.String({ pattern: '^D-\\d{4}$' }),
   deviceType: Type.String({minLength: 2, maxLength: 8}),
   timestamp: Type.String({format: 'date-time'}),
   location: Type.String({minLength: 2, maxLength: 2})
@@ -32,7 +32,7 @@ export const ActivityID = Type.Object({
 });
 
 export const ActivityName = Type.Object({
-  deviceID: Type.String()
+  device: Type.String()
 });
 
 export const Activity = Type.Composite([ActivityBody, ActivityID]);
@@ -50,7 +50,7 @@ export const LocationTime = Type.Object({
 });
 
 export const ActivityDetail = Type.Object({
-  deviceID: Type.String(),
+  device: Type.String(),
   deviceType: Type.String(),
   timeAt: Type.Array(LocationTime),
   totalTime: Type.Integer({minimum: 5})

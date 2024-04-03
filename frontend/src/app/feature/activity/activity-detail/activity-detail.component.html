@@ -1,16 +1,22 @@
 <main class="bullseye bg-[#000000aa] h-full p-8">
   <div class="card">
-    <mat-list>
-      @for (item of (activity() | keyvalue); track $index) {
-      <mat-list-item>
-        <span class="font-bold">{{ item.key | titlecase }}: </span>
-        <span>{{ item.value }}</span>
-      </mat-list-item>
-      }
-    </mat-list>
-    <hr>
-    @if (!!options) {
+    @if (loading()) {
+    <mat-progress-spinner class="m-48" mode="indeterminate" [diameter]="48" color="primary"></mat-progress-spinner>
+    } @else {
+      <mat-list>
+        @for (item of (activity() | keyvalue); track $index) {
+          @if (!!item.value) {
+            <mat-list-item>
+              <span class="font-bold mr-2">{{ item.key | decamelize }}:</span>
+              <span>{{ item.value }}</span>
+              </mat-list-item>
+              }
+        }
+      </mat-list>
+      <hr>
+      @if (!!options) {
       <ag-charts-angular class="bg-smoke-yellow h-full" [options]="options"></ag-charts-angular>
+      }
     }
   </div>
 </main>

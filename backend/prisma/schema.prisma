@@ -51,7 +51,7 @@ model User {
 
 view ViewActivity {
   id         Int      @unique
-  deviceID   String   @db.NVarChar(6)
+  device     String   @db.NVarChar(6)
   deviceType String   @db.NVarChar(8)
   timestamp  DateTime
   location   String   @db.NVarChar(2)
@@ -59,7 +59,7 @@ view ViewActivity {
 
 view ViewActivityLatest {
   id         Int      @unique
-  deviceID   String   @db.NVarChar(6)
+  device     String   @db.NVarChar(6)
   deviceType String   @db.NVarChar(8)
   timestamp  DateTime
   location   String   @db.NVarChar(2)

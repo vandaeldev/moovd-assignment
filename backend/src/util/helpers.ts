@@ -3,11 +3,11 @@ import { REVOKED } from './constants.js';
 import type { FastifyRequest } from 'fastify';
 import type { IActivityDetail, IActivityReply, TActivityBody } from '../types.d.ts';
 
-export const constructActivityData = ({ deviceID, deviceType, location, timestamp }: TActivityBody) => ({
+export const constructActivityData = ({ device, deviceType, location, timestamp }: TActivityBody) => ({
   Device: {
     connectOrCreate: {
       create: {
-        name: deviceID!,
+        name: device!,
         DeviceType: {
           connectOrCreate: {
             create: { name: deviceType! },
@@ -15,7 +15,7 @@ export const constructActivityData = ({ deviceID, deviceType, location, timestam
           }
         }
       },
-      where: { name: deviceID! }
+      where: { name: device! }
     }
   },
   Location: {
@@ -31,7 +31,7 @@ export const activityColumns = () => Prisma.dmmf.datamodel.models.find(a => a.na
 
 export const validateToken = (_: FastifyRequest, decodedToken: Record<string, unknown>) => REVOKED.includes(JSON.stringify(decodedToken)) ? false : decodedToken;
 
-export const toActivityDetail = (deviceID: string, activity: ViewActivity[]) => {
+export const toActivityDetail = (device: string, activity: ViewActivity[]) => {
   if (!activity.length) return activity as [];
   let totalTime = 0;
   const timeAt = activity.reduce<IActivityDetail['timeAt']>((acc, { location }) => {
@@ -41,5 +41,5 @@ export const toActivityDetail = (deviceID: string, activity: ViewActivity[]) => 
     else acc.push({ location, time: 5 });
     return acc;
   }, []);
-  return { deviceID, deviceType: activity[0].deviceType, timeAt, totalTime } as IActivityDetail;
+  return { device, deviceType: activity[0].deviceType, timeAt, totalTime } as IActivityDetail;
 };

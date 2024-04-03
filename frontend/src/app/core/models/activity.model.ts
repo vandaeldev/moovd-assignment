@@ -12,8 +12,10 @@ export interface IActivityResponse {
 }
 
 export interface IActivityDetail {
-  deviceID: string;
+  device: string;
   deviceType: string;
   timeAt: Record<string, number>;
   totalTime: number;
 }
+
+export type TActivityDetailMapped = Pick<IActivityDetail, 'device' | 'deviceType'> & {totalTime: string};

@@ -1,22 +1,35 @@
 <main class="bullseye bg-[#000000aa] h-full p-8">
   <div class="card">
-    <mat-form-field>
-      <mat-label>Filter</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. D-1576" #input>
-    </mat-form-field>
-    <table mat-table [dataSource]="dataSource" matSort recycleRows>
-      @for (col of displayedColumns(); track $index) {
-      <ng-container [matColumnDef]="col">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ col }} </th>
-        <td mat-cell *matCellDef="let row"> {{ row[col] }} </td>
-      </ng-container>
-      }
-      <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
-      <tr class="cursor-pointer hover:bg-slate-100 transition-colors" mat-row *matRowDef="let row; columns: displayedColumns();" (click)="onClickRow(row.deviceID)"></tr>
-      <tr *matNoDataRow>
-        <td colspan="4">No data matching the filter '{{ input.value }}'</td>
-      </tr>
-    </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+    @if (loading()) {
+      <mat-progress-spinner class="m-48" mode="indeterminate" [diameter]="48" color="primary"></mat-progress-spinner>
+    }
+    <div [ngClass]="{hidden: loading()}">
+      <mat-form-field class="w-full">
+        <mat-label>Filter</mat-label>
+        <span class="flex space-between">
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. D-1576" #input>
+          <span class="material-symbols-outlined">search</span>
+        </span>
+      </mat-form-field>
+      <table mat-table [dataSource]="dataSource" matSort recycleRows>
+        @for (col of displayedColumns(); track $index) {
+        <ng-container [matColumnDef]="col">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ col | decamelize }} </th>
+          <td mat-cell *matCellDef="let row"> {{ row[col] }} </td>
+        </ng-container>
+        }
+        <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
+        <tr
+          class="cursor-pointer hover:bg-slate-100 transition-colors"
+          mat-row
+          *matRowDef="let row; columns: displayedColumns();"
+          (click)="onClickRow(row.device)"
+        ></tr>
+        <tr *matNoDataRow>
+          <td colspan="4">No data matching the filter '{{ input.value }}'</td>
+        </tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+    </div>
   </div>
 </main>
