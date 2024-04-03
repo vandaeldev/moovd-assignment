@@ -6,5 +6,10 @@
       <span class="logo-text">Assignment</span>
     </div>
   </div>
+  @if (authService.isLoggedIn()) {
+    <span class="absolute top-12 right-12">
+      <button mat-raised-button color="warn" (click)="authService.logout()">Logout</button>
+    </span>
+  }
   <router-outlet></router-outlet>
 </div>

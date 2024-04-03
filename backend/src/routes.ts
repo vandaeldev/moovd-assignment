@@ -2,7 +2,7 @@ import { compare, hash } from 'bcrypt';
 import { StatusCodes } from 'http-status-codes';
 import { deleteActivity, deleteUser, getActivity, getActivityById, getActivityLatest, getExistingUsers, getUserById, getUserByName, patchUser, postActivity, postUser, putActivity } from './util/db.js';
 import { Activity, ActivityBody, ActivityID, ActivityResponse, LoginBody, LoginResponse, RequestError, UserBody, UserID, UserPatchBody } from './util/validation.js';
-import { CT_PROBLEM_JSON, PROBLEM_TYPE_URL } from './util/constants.js';
+import { CT_PROBLEM_JSON, PROBLEM_TYPE_URL, REVOKED } from './util/constants.js';
 import type { FastifyInstance, FastifyPluginCallback } from 'fastify';
 import type { Activity as TActivity, User as TUser, ViewActivity } from '@prisma/client';
 import type { IActivityReply, IRequestError, TActivityBody, TWithAuth } from './types.d.ts';
@@ -109,6 +109,16 @@ export default ((app: TWithAuth<FastifyInstance>, _, done) => {
       if (!match) return void res.callNotFound();
       const token = app.jwt.sign({ id: user.id });
       res.send({ token });
+    }
+  });
+
+  app.route<{ Reply: void }>({
+    method: 'GET',
+    url: '/logout',
+    handler: async (req, res) => {
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      if (!!token) REVOKED.push(JSON.stringify(token));
+      res.send();
     }
   });
 

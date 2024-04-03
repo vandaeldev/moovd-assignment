@@ -9,6 +9,7 @@ import routes from './routes.js';
 import getClient, { initClient } from './util/db.js';
 import { CT_PROBLEM_JSON, ORIGIN_REGEX, PROBLEM_TYPE_URL, RATE_LIMIT } from './util/constants.js';
 import { ACC_PRIV, ACC_PUB, CERT_DIR, JWT, KEY_FMT } from './util/constants.js';
+import { validateToken } from './util/helpers.js';
 import type { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import type { FastifyJWTOptions } from '@fastify/jwt';
 
@@ -39,7 +40,8 @@ const fastify = Fastify({ logger: { transport: { target: '@fastify/one-line-logg
       algorithms: [JWT.ALG],
       allowedIss: env.JWT_ISS || JWT.ISS,
       allowedAud: env.JWT_AUD || JWT.AUD
-    }
+    },
+    trusted: validateToken
   } satisfies FastifyJWTOptions)
   .decorate('auth', async (req: FastifyRequest) => void await req.jwtVerify())
   .register(routes, { prefix: '/v1' })

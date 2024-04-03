@@ -17,3 +17,5 @@ export const JWT = {
   EXP: '30m',
   REGEX: '/eyJ[A-Za-z0-9-_]+\\.eyJ[A-Za-z0-9-_]+\\.[A-Za-z0-9-_.+/]*/g'
 } as const;
+
+export const REVOKED: string[] = [];

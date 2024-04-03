@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { concatMap, map } from 'rxjs';
 import { API_URL } from '@core/constants';
 import type { ILoginFormValue, ISignupFormValue } from '@core/models';
@@ -15,6 +16,7 @@ export class AuthService {
   private _token = signal<string | null>(null);
 
   private readonly httpClient = inject(HttpClient);
+  private readonly router = inject(Router);
 
   public login(creds: ILoginFormValue) {
     return this.httpClient.post<{token: string}>(`${API_URL}/login`, creds).pipe(
@@ -34,13 +36,12 @@ export class AuthService {
   }
 
   public logout() {
-    return this.httpClient.get(`${API_URL}/logout`).pipe(
-      map(() => {
-        this._token.set(null);
-        this._isLoggedIn.set(false);
-        window.sessionStorage.removeItem('isLoggedIn');
-        window.sessionStorage.removeItem('token');
-      })
-    );
+    this.httpClient.get(`${API_URL}/logout`).subscribe(() => {
+      this._token.set(null);
+      this._isLoggedIn.set(false);
+      window.sessionStorage.removeItem('isLoggedIn');
+      window.sessionStorage.removeItem('token');
+      this.router.navigate(['/login']);
+    });
   }
 }
