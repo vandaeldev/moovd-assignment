@@ -1,3 +1,16 @@
 <main class="bullseye bg-[#000000aa] h-full p-8">
-  <pre>{{ activity() | json }}</pre>
+  <div class="card">
+    <mat-list>
+      @for (item of (activity() | keyvalue); track $index) {
+      <mat-list-item>
+        <span class="font-bold">{{ item.key | titlecase }}: </span>
+        <span>{{ item.value }}</span>
+      </mat-list-item>
+      }
+    </mat-list>
+    <hr>
+    @if (!!options) {
+      <ag-charts-angular class="bg-smoke-yellow h-full" [options]="options"></ag-charts-angular>
+    }
+  </div>
 </main>

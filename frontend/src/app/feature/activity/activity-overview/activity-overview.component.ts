@@ -28,7 +28,7 @@ export class ActivityOverviewComponent implements OnInit, AfterViewInit {
 
   public ngOnInit() {
     this.activityService.fetchActivityLatest().subscribe(({ columns, data }) => {
-      this.displayedColumns.set(columns);
+      this.displayedColumns.set(columns.filter(c => c !== 'id'));
       this.dataSource.data = data;
     });
   }
@@ -45,7 +45,7 @@ export class ActivityOverviewComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator?.firstPage();
   }
 
-  public onClickRow(id: number) {
+  public onClickRow(id: string) {
     this.router.navigate(['/activity', id]);
   }
 }

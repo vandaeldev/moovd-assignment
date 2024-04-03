@@ -31,6 +31,10 @@ export const ActivityID = Type.Object({
   id: Type.Integer({minimum: 1})
 });
 
+export const ActivityName = Type.Object({
+  deviceID: Type.String()
+});
+
 export const Activity = Type.Composite([ActivityBody, ActivityID]);
 
 export const ActivityArray = Type.Array(Activity);
@@ -38,6 +42,18 @@ export const ActivityArray = Type.Array(Activity);
 export const ActivityResponse = Type.Object({
   columns: Type.Array(Type.String()),
   data: ActivityArray
+});
+
+export const LocationTime = Type.Object({
+  location: Type.String(),
+  time: Type.Integer({minimum: 5})
+});
+
+export const ActivityDetail = Type.Object({
+  deviceID: Type.String(),
+  deviceType: Type.String(),
+  timeAt: Type.Array(LocationTime),
+  totalTime: Type.Integer({minimum: 5})
 });
 
 export const RequestError = Type.Object({

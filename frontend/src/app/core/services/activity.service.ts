@@ -1,7 +1,7 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { API_URL, WITH_AUTH } from '@core/constants';
-import type { IActivity, IActivityResponse } from '@core/models';
+import type { IActivityDetail, IActivityResponse } from '@core/models';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class ActivityService {
     return this.httpClient.get<IActivityResponse>(`${API_URL}/${this.endpoint}-latest`, this.defHttpOpts);
   }
 
-  public fetchActivityByID(id: number) {
-    return this.httpClient.get<IActivity>(`${API_URL}/${this.endpoint}/${id}`, this.defHttpOpts);
+  public fetchActivityByID(id: string) {
+    return this.httpClient.get<IActivityDetail>(`${API_URL}/${this.endpoint}/${id}`, this.defHttpOpts);
   }
 }

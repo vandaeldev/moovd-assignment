@@ -35,6 +35,9 @@ dependencies:
   '@angular/router':
     specifier: ^17.3.0
     version: 17.3.2(@angular/common@17.3.2)(@angular/core@17.3.2)(@angular/platform-browser@17.3.2)(rxjs@7.8.1)
+  ag-charts-angular:
+    specifier: ^9.2.0
+    version: 9.2.0(@angular/common@17.3.2)(@angular/core@17.3.2)(ag-charts-community@9.2.0)
   http-status-codes:
     specifier: ^2.3.0
     version: 2.3.0
@@ -3611,6 +3614,23 @@ packages:
       loader-utils: 2.0.4
       regex-parser: 2.3.0
     dev: true
+
+  /ag-charts-angular@9.2.0(@angular/common@17.3.2)(@angular/core@17.3.2)(ag-charts-community@9.2.0):
+    resolution: {integrity: sha512-bM6e2NATjxd4bTfFs5rRmvx8SuHuE6kfyB+jUuRCTc/6l43s/LHD7yVGCARSZF9AoPYtrvo8CoBwdH7g1DNRGg==}
+    peerDependencies:
+      '@angular/common': '>= 14.0.0'
+      '@angular/core': '>= 14.0.0'
+      ag-charts-community: 9.2.0
+    dependencies:
+      '@angular/common': 17.3.2(@angular/core@17.3.2)(rxjs@7.8.1)
+      '@angular/core': 17.3.2(rxjs@7.8.1)(zone.js@0.14.4)
+      ag-charts-community: 9.2.0
+      tslib: 2.6.2
+    dev: false
+
+  /ag-charts-community@9.2.0:
+    resolution: {integrity: sha512-dS5nPExh81owIIdyHli0TvWvSyhmZy2RncM/s3/KXpjAf3eiVN2fxfT2z+QxqsLyoms+fernp5cAuSju0peYXw==}
+    dev: false
 
   /agent-base@7.1.1:
     resolution: {integrity: sha512-H0TSyFNDMomMNJQBn8wFV5YC/2eJ+VXECwOadZJT554xP6cODZHPX3H9QMQECxvrgiSOP1pHjy1sMWQVYJOUOA==}

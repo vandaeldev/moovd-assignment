@@ -162,6 +162,10 @@ $my-theme: mat.define-light-theme((
   .link {
     @apply text-teal-blue-500 hover:text-teal-blue-400 transition-colors cursor-pointer underline;
   }
+
+  .card {
+    @apply bg-smoke-yellow max-h-full overflow-auto rounded-md shadow-lg;
+  }
 }
 
 @layer utilities {

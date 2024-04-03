@@ -19,3 +19,15 @@ export interface IActivityReply {
   columns: (keyof ViewActivity)[];
   data: ViewActivity[],
 }
+
+export interface IActivityDetail {
+  deviceID: string;
+  deviceType: string;
+  timeAt: ILocationTime[];
+  totalTime: number;
+}
+
+export interface ILocationTime {
+  location: string;
+  time: number;
+}

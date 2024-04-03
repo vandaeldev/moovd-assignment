@@ -1,12 +1,13 @@
 import { compare, hash } from 'bcrypt';
+import { Type } from '@sinclair/typebox';
 import { StatusCodes } from 'http-status-codes';
-import { deleteActivity, deleteUser, getActivity, getActivityById, getActivityLatest, getExistingUsers, getUserById, getUserByName, patchUser, postActivity, postUser, putActivity } from './util/db.js';
-import { Activity, ActivityBody, ActivityID, ActivityResponse, LoginBody, LoginResponse, RequestError, UserBody, UserID, UserPatchBody } from './util/validation.js';
+import { deleteActivity, deleteUser, getActivity, getActivityFilter, getActivityLatest, getExistingUsers, getUserById, getUserByName, patchUser, postActivity, postUser, putActivity } from './util/db.js';
+import { ActivityBody, ActivityDetail, ActivityID, ActivityName, ActivityResponse, LoginBody, LoginResponse, RequestError, UserBody, UserID, UserPatchBody } from './util/validation.js';
+import { activityColumns, toActivityDetail } from './util/helpers.js';
 import { CT_PROBLEM_JSON, PROBLEM_TYPE_URL, REVOKED } from './util/constants.js';
 import type { FastifyInstance, FastifyPluginCallback } from 'fastify';
 import type { Activity as TActivity, User as TUser, ViewActivity } from '@prisma/client';
-import type { IActivityReply, IRequestError, TActivityBody, TWithAuth } from './types.d.ts';
-import { activityColumns } from './util/helpers.js';
+import type { IActivityDetail, IActivityReply, IRequestError, TActivityBody, TWithAuth } from './types.d.ts';
 
 export default ((app: TWithAuth<FastifyInstance>, _, done) => {
   app.route<{ Reply: IActivityReply }>({
@@ -33,14 +34,16 @@ export default ((app: TWithAuth<FastifyInstance>, _, done) => {
     }
   });
 
-  app.route<{ Params: Pick<ViewActivity, 'id'>, Reply: ViewActivity }>({
+  app.route<{ Params: Pick<ViewActivity, 'deviceID'>, Reply: IActivityDetail | [] }>({
     method: 'GET',
-    url: '/activity/:id',
+    url: '/activity/:deviceID',
     onRequest: [app.auth!],
-    schema: { params: ActivityID, response: { [StatusCodes.OK]: Activity } },
+    schema: { params: ActivityName, response: { [StatusCodes.OK]: ActivityDetail || Type.Array } },
     handler: async (req, res) => {
-      const activity = await getActivityById(+req.params.id);
-      !activity ? res.callNotFound() : res.send(activity);
+      const activity = await getActivityFilter({ deviceID: req.params.deviceID });
+      if (!activity) return void res.callNotFound();
+      const activityDetail = toActivityDetail(req.params.deviceID, activity);
+      res.send(activityDetail);
     }
   });
 
