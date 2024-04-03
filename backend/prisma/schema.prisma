@@ -51,8 +51,16 @@ model User {
 
 view ViewActivity {
   id         Int      @unique
-  deviceID   String?  @db.NVarChar(6)
-  deviceType String?  @db.NVarChar(8)
+  deviceID   String   @db.NVarChar(6)
+  deviceType String   @db.NVarChar(8)
   timestamp  DateTime
-  location   String?  @db.NVarChar(2)
+  location   String   @db.NVarChar(2)
+}
+
+view ViewActivityLatest {
+  id         Int      @unique
+  deviceID   String   @db.NVarChar(6)
+  deviceType String   @db.NVarChar(8)
+  timestamp  DateTime
+  location   String   @db.NVarChar(2)
 }

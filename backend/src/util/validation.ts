@@ -35,6 +35,11 @@ export const Activity = Type.Composite([ActivityBody, ActivityID]);
 
 export const ActivityArray = Type.Array(Activity);
 
+export const ActivityResponse = Type.Object({
+  columns: Type.Array(Type.String()),
+  data: ActivityArray
+});
+
 export const RequestError = Type.Object({
   type: Type.String({pattern: `^${PROBLEM_TYPE_URL}/4\\d{2}$`}),
   title: Type.String(),

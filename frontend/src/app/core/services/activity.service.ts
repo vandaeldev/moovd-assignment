@@ -1,7 +1,7 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { API_URL, WITH_AUTH } from '@core/constants';
-import type { IActivity } from '@core/models';
+import type { IActivity, IActivityResponse } from '@core/models';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,11 @@ export class ActivityService {
   private readonly httpClient = inject(HttpClient);
 
   public fetchActivity() {
-    return this.httpClient.get<IActivity[]>(`${API_URL}/${this.endpoint}`, this.defHttpOpts);
+    return this.httpClient.get<IActivityResponse>(`${API_URL}/${this.endpoint}`, this.defHttpOpts);
+  }
+
+  public fetchActivityLatest() {
+    return this.httpClient.get<IActivityResponse>(`${API_URL}/${this.endpoint}-latest`, this.defHttpOpts);
   }
 
   public fetchActivityByID(id: number) {

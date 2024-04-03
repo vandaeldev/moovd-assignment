@@ -24,8 +24,8 @@ const writeKeys = async ({ publicKey, privateKey }: KeyPairSyncResult<string, st
   const pubFile = join(CERT_DIR, `${pub}.${KEY_FMT}`);
   const privFile = join(CERT_DIR, `${priv}.${KEY_FMT}`);
   await Promise.all([writeFile(pubFile, publicKey), writeFile(privFile, privateKey)]);
-  console.info(`created public key in ${pubFile}`);
-  console.info(`created private key in ${privFile}`);
+  console.info(`🔏 created public key in ${pubFile}`);
+  console.info(`🔏 created private key in ${privFile}`);
 };
 
 export const initKeys = async () => {
@@ -35,7 +35,7 @@ export const initKeys = async () => {
     try {
       await access(join(CERT_DIR, `${ACC_PUB}.${KEY_FMT}`));
       await access(join(CERT_DIR, `${ACC_PRIV}.${KEY_FMT}`));
-      console.info(`using existing keys in '${CERT_DIR}'`);
+      console.info(`🔒 using existing keys in '${CERT_DIR}'`);
     } catch {
       const keyPair = await genKeyPair(EC, keyConf);
       await writeKeys(keyPair, [ACC_PUB, ACC_PRIV]);

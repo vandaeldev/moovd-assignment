@@ -1,5 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-import { constructActivityData } from './helpers.js';
+import { activityColumns, constructActivityData } from './helpers.js';
 import type { TActivityBody } from '../types.d.ts';
 
 let client: PrismaClient;
@@ -15,8 +15,9 @@ export const initClient = () => {
 
 export const getActivity = getClient().viewActivity.findMany;
 
-export const getActivityById = (id: number) =>
-  getClient().viewActivity.findUnique({ where: { id } });
+export const getActivityLatest = getClient().viewActivityLatest.findMany;
+
+export const getActivityById = (id: number) => getClient().viewActivity.findUnique({ where: { id } });
 
 export const postActivity = (activity: TActivityBody) =>
   getClient().activity.create({

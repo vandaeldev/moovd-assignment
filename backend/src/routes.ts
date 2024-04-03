@@ -1,21 +1,35 @@
 import { compare, hash } from 'bcrypt';
 import { StatusCodes } from 'http-status-codes';
-import { deleteActivity, deleteUser, getActivity, getActivityById, getExistingUsers, getUserById, getUserByName, patchUser, postActivity, postUser, putActivity } from './util/db.js';
-import { Activity, ActivityArray, ActivityBody, ActivityID, LoginBody, LoginResponse, RequestError, UserBody, UserID, UserPatchBody } from './util/validation.js';
+import { deleteActivity, deleteUser, getActivity, getActivityById, getActivityLatest, getExistingUsers, getUserById, getUserByName, patchUser, postActivity, postUser, putActivity } from './util/db.js';
+import { Activity, ActivityBody, ActivityID, ActivityResponse, LoginBody, LoginResponse, RequestError, UserBody, UserID, UserPatchBody } from './util/validation.js';
 import { CT_PROBLEM_JSON, PROBLEM_TYPE_URL } from './util/constants.js';
 import type { FastifyInstance, FastifyPluginCallback } from 'fastify';
 import type { Activity as TActivity, User as TUser, ViewActivity } from '@prisma/client';
-import type { IRequestError, TActivityBody, TWithAuth } from './types.d.ts';
+import type { IActivityReply, IRequestError, TActivityBody, TWithAuth } from './types.d.ts';
+import { activityColumns } from './util/helpers.js';
 
 export default ((app: TWithAuth<FastifyInstance>, _, done) => {
-  app.route<{ Reply: ViewActivity[] }>({
+  app.route<{ Reply: IActivityReply }>({
     method: 'GET',
     url: '/activity',
     onRequest: [app.auth!],
-    schema: { response: { [StatusCodes.OK]: ActivityArray } },
-    handler: async (req, res) => {
+    schema: { response: { [StatusCodes.OK]: ActivityResponse } },
+    handler: async (_, res) => {
       const activity = await getActivity();
-      res.send(activity);
+      const columns = activityColumns();
+      res.send({columns, data: activity});
+    }
+  });
+
+  app.route<{ Reply: IActivityReply }>({
+    method: 'GET',
+    url: '/activity-latest',
+    onRequest: [app.auth!],
+    schema: { response: { [StatusCodes.OK]: ActivityResponse } },
+    handler: async (_, res) => {
+      const activity = await getActivityLatest();
+      const columns = activityColumns();
+      res.send({columns, data: activity});
     }
   });
 

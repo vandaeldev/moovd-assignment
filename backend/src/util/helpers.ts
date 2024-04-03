@@ -1,4 +1,5 @@
-import type { TActivityBody } from '../types.d.ts';
+import { Prisma } from '@prisma/client';
+import type { IActivityReply, TActivityBody } from '../types.d.ts';
 
 export const constructActivityData = ({ deviceID, deviceType, location, timestamp }: TActivityBody) => ({
   Device: {
@@ -23,3 +24,5 @@ export const constructActivityData = ({ deviceID, deviceType, location, timestam
   },
   timestamp: new Date(timestamp)
 });
+
+export const activityColumns = () => Prisma.dmmf.datamodel.models.find(a => a.name === 'ViewActivity')?.fields.map(({ name }) => name) as IActivityReply['columns'];

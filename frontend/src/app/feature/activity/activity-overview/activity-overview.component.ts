@@ -1,4 +1,4 @@
-import { type AfterViewInit, ChangeDetectionStrategy, Component, signal, type OnInit, viewChild } from '@angular/core';
+import { type AfterViewInit, ChangeDetectionStrategy, Component, signal, type OnInit, viewChild, inject } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatRippleModule } from '@angular/material/core';
@@ -21,19 +21,15 @@ export class ActivityOverviewComponent implements OnInit, AfterViewInit {
   public displayedColumns = signal([] as (keyof IActivity)[]);
   public dataSource = new MatTableDataSource([] as IActivity[]);
 
+  private readonly router = inject(Router);
+  private readonly activityService = inject(ActivityService);
   private readonly paginator = viewChild.required(MatPaginator);
   private readonly sort = viewChild.required(MatSort);
 
-  constructor(
-    private readonly router: Router,
-    private readonly activityService: ActivityService
-  ) { }
-
   public ngOnInit() {
-    this.activityService.fetchActivity().subscribe(activity => {
-      const columns = Object.keys(activity[0]) as (keyof typeof activity[number])[];
+    this.activityService.fetchActivityLatest().subscribe(({ columns, data }) => {
       this.displayedColumns.set(columns);
-      this.dataSource.data = activity;
+      this.dataSource.data = data;
     });
   }
 
