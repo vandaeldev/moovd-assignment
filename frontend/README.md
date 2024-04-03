@@ -16,3 +16,11 @@ After a quick build, the frontend application will be reachable at `http://local
 ## Notes
 
 >The frontend application expects the REST API backend to be served at `http://localhost:3000`. If you decide to serve the backend at another domain or port, you must change the `target` property of the [proxy config file](/frontend/proxy.conf.json) accordingly.
+
+## Potential improvements/enhancements
+
+- Automated E2E testing (e.g. Cypress)
+- i18n functionality
+- Customized component library (e.g. buttons)
+- Customized error messages
+- Page transition animations and element interactivity animations

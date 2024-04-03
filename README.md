@@ -18,3 +18,11 @@ The project consists of the following components:
 ## Running the code
 
 See the respective `README` files of the [backend](/backend/README.md) and [frontend](/frontend/README.md) for instructions to run the code.
+
+## Potential improvements/enhancements
+
+- Monorepo workspaces
+- Project linting (e.g. ESLint)
+- Code formatter (e.g. Prettier)
+
+> See for improvements/enhancements specific to [frontend](/frontend/README.md) or [backend](/backend/README.md) the respective READMEs in those folders.

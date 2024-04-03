@@ -54,3 +54,13 @@ After these steps, your database will be ready for use.
 - Run `pnpm start` to build and run the API server.
 
 The REST API will be reachable at `http://localhost:3000`.
+
+## Potential improvements/enhancements
+
+- Automated integration testing (e.g. Mocha)
+- External auth provider (e.g. Auth0)
+- JWT: refresh token and JWE implementation
+- Data filtering, sorting and pagination
+- i18n functionality
+- Compression middleware
+- Serverless with AWS Lambda
