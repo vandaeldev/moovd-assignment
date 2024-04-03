@@ -102,7 +102,7 @@ $blue-palette: (
   )
 );
 
-$my-primary: mat.define-palette($teal-palette, 600);
+$my-primary: mat.define-palette($teal-palette, 800);
 $my-accent: mat.define-palette($tan-palette, 200, 100, 400);
 $my-blue: mat.define-palette($blue-palette, 700);
 $my-red: mat.define-palette($red-palette, 500);
