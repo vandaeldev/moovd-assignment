@@ -18,7 +18,7 @@
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
-  "packageManager": "pnpm@8.15.1",
+  "packageManager": "pnpm@9.0.0-beta.3",
   "keywords": [],
   "author": "Dominic van Dael <vandael.dev@gmail.com>",
   "license": "ISC",
