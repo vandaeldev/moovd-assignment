@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "serve:ssr:frontend": "node dist/frontend/server/server.mjs"
   },
   "packageManager": "pnpm@9.0.0-beta.3",
   "private": true,
