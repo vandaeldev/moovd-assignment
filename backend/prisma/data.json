@@ -1,96 +1,96 @@
 [
   {
-    "deviceID": "D-1567",
+    "device": "D-1567",
     "deviceType": "Aircraft",
     "timestamp": "2022-08-31 10:05 GMT",
     "location": "L1"
   },
   {
-    "deviceID": "D-1567",
+    "device": "D-1567",
     "deviceType": "Aircraft",
     "timestamp": "2022-08-31 10:10 GMT",
     "location": "L1"
   },
   {
-    "deviceID": "D-1567",
+    "device": "D-1567",
     "deviceType": "Aircraft",
     "timestamp": "2022-08-31 10:15 GMT",
     "location": "L1"
   },
   {
-    "deviceID": "D-1567",
+    "device": "D-1567",
     "deviceType": "Aircraft",
     "timestamp": "2022-08-31 10:20 GMT",
     "location": "L1"
   },
   {
-    "deviceID": "D-1567",
+    "device": "D-1567",
     "deviceType": "Aircraft",
     "timestamp": "2022-08-31 10:25 GMT",
     "location": "L2"
   },
   {
-    "deviceID": "D-1568",
+    "device": "D-1568",
     "deviceType": "Personal",
     "timestamp": "2022-08-31 10:05 GMT",
     "location": "L3"
   },
   {
-    "deviceID": "D-1568",
+    "device": "D-1568",
     "deviceType": "Personal",
     "timestamp": "2022-08-31 10:10 GMT",
     "location": "L3"
   },
   {
-    "deviceID": "D-1568",
+    "device": "D-1568",
     "deviceType": "Personal",
     "timestamp": "2022-08-31 10:15 GMT",
     "location": "L3"
   },
   {
-    "deviceID": "D-1568",
+    "device": "D-1568",
     "deviceType": "Personal",
     "timestamp": "2022-08-31 10:20 GMT",
     "location": "L3"
   },
   {
-    "deviceID": "D-1568",
+    "device": "D-1568",
     "deviceType": "Personal",
     "timestamp": "2022-08-31 10:25 GMT",
     "location": "L3"
   },
   {
-    "deviceID": "D-1569",
+    "device": "D-1569",
     "deviceType": "Asset",
     "timestamp": "2022-08-31 10:15 GMT",
     "location": "L4"
   },
   {
-    "deviceID": "D-1569",
+    "device": "D-1569",
     "deviceType": "Asset",
     "timestamp": "2022-08-31 10:20 GMT",
     "location": "L4"
   },
   {
-    "deviceID": "D-1569",
+    "device": "D-1569",
     "deviceType": "Asset",
     "timestamp": "2022-08-31 10:30 GMT",
     "location": "L1"
   },
   {
-    "deviceID": "D-1569",
+    "device": "D-1569",
     "deviceType": "Asset",
     "timestamp": "2022-08-31 10:35 GMT",
     "location": "L1"
   },
   {
-    "deviceID": "D-1570",
+    "device": "D-1570",
     "deviceType": "Personal",
     "timestamp": "2022-08-31 10:35 GMT",
     "location": "L5"
   },
   {
-    "deviceID": "D-1571",
+    "device": "D-1571",
     "deviceType": "Asset",
     "timestamp": "2022-08-31 10:35 GMT",
     "location": "L6"

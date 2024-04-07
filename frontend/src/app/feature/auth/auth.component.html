@@ -1,28 +1,34 @@
 <main class="bullseye h-full">
   <div class="bullseye flex-col gap-8 w-1/2">
-    <p class="text-smoke-yellow font-bold text-3xl">{{ signup() ? 'Join us:' : 'Welcome back!' }}</p>
-    <form class="grid w-80 gap-4" [formGroup]="signup() ? signupForm : loginForm">
+    <p class="text-smoke-yellow font-bold text-3xl" data-cy="auth-title">{{ signup() ? 'Join us:' : 'Welcome back!' }}</p>
+    <form class="grid w-80 gap-4" [formGroup]="signup() ? signupForm : loginForm" data-cy="auth-form">
       @if (signup()) {
         <div class="form-field">
           <span class="material-symbols-outlined">alternate_email</span>
-          <input type="email" class="input" formControlName="email" placeholder="Email*">
+          <input type="email" class="input" formControlName="email" placeholder="Email*" data-cy="auth-email">
         </div>
       }
       <div class="form-field">
         <span class="material-symbols-outlined">id_card</span>
-        <input class="input" formControlName="username" placeholder="{{ signup() ? 'Username*' : 'Username / Email' }}">
+        <input class="input" formControlName="username" placeholder="{{ signup() ? 'Username*' : 'Username / Email' }}" data-cy="auth-username">
       </div>
       <div class="form-field">
         <span class="material-symbols-outlined cursor-pointer" (click)="toggleVisibility()">{{ visible() ? 'lock_open_right' : 'lock' }}</span>
-        <input [type]="visible() ? 'text' : 'password'" class="input" formControlName="password" placeholder="Password*">
+        <input [type]="visible() ? 'text' : 'password'" class="input" formControlName="password" placeholder="Password*" data-cy="auth-password">
       </div>
       <div class="flex justify-between items-center w-full mt-4">
-        <button mat-raised-button color="primary" [disabled]="loading() || signup() ? !signupForm.valid : !loginForm.valid" (click)="signup() ? onSignup() : onLogin()">
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="loading() || signup() ? !signupForm.valid : !loginForm.valid"
+          (click)="signup() ? onSignup() : onLogin()"
+          data-cy="auth-submit"
+        >
           @if (loading()) {
             <mat-progress-spinner color="accent" diameter="20" mode="indeterminate"></mat-progress-spinner>
           } @else { {{ signup() ? 'Sign Up' : 'Login' }} }
         </button>
-        <a class="link" (click)="toggleSignup()">{{ signup() ? 'I have an account' : 'Don\'t have an account yet?' }}</a>
+        <a class="link" (click)="toggleSignup()" data-cy="auth-toggle">{{ signup() ? 'I have an account' : 'Don\'t have an account yet?' }}</a>
       </div>
     </form>
   </div>
