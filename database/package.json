@@ -1,0 +1,25 @@
+{
+  "name": "database",
+  "version": "0.1.0",
+  "main": "seed.ts",
+  "type": "module",
+  "engines": {
+    "node": ">=22.2.0"
+  },
+  "scripts": {
+    "seed": "dotenvx run -- tsx seed.ts",
+    "convert-env": "dotenvx convert -f .env",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true,
+  "packageManager": "pnpm@9.4.0",
+  "keywords": [],
+  "author": "Dominic van Dael <vandael.dev@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@dotenvx/dotenvx": "^0.45.0",
+    "@types/node": "^20.14.8",
+    "surrealdb.js": "1.0.0-beta.9",
+    "tsx": "^4.15.7"
+  }
+}
