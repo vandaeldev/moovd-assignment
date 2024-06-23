@@ -1,8 +1,8 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { concatMap, map } from 'rxjs';
-import { API_URL } from '@core/constants';
+import { SurrealService } from 'ngx-surreal';
+import { SURREAL_SCOPE } from '@core/constants';
 import type { ILoginFormValue, ISignupFormValue } from '@core/models';
 
 @Injectable({
@@ -10,37 +10,31 @@ import type { ILoginFormValue, ISignupFormValue } from '@core/models';
 })
 export class AuthService {
   public isLoggedIn = computed(() => this._isLoggedIn() || window.sessionStorage.getItem('isLoggedIn') === 'true');
-  public token = computed(() => this._token() || window.sessionStorage.getItem('token'));
   public requestedURL = signal<string | null>(null);
 
   private _isLoggedIn = signal(false);
-  private _token = signal<string | null>(null);
 
-  private readonly httpClient = inject(HttpClient);
   private readonly router = inject(Router);
+  private readonly surrealService = inject(SurrealService);
 
   public login(creds: ILoginFormValue) {
-    return this.httpClient.post<{token: string}>(`${API_URL}/login`, creds).pipe(
-      map(({ token }) => {
-        this._token.set(token);
+    return this.surrealService
+      .signin({ ...creds, email: creds.username, scope: SURREAL_SCOPE })
+      .pipe(map(() => {
         this._isLoggedIn.set(true);
         window.sessionStorage.setItem('isLoggedIn', 'true');
-        window.sessionStorage.setItem('token', token);
-      })
-    );
+      }));
   }
 
   public signup(creds: ISignupFormValue) {
-    return this.httpClient.post(`${API_URL}/signup`, creds).pipe(
-      concatMap(() => this.login(creds))
-    );
+    return this.surrealService
+      .signup({ ...creds, scope: SURREAL_SCOPE })
+      .pipe(concatMap(() => this.login(creds)));
   }
 
   public logout() {
-    this.httpClient.get(`${API_URL}/logout`).subscribe(() => {
+    this.surrealService.invalidate().subscribe(() => {
       window.sessionStorage.removeItem('isLoggedIn');
-      window.sessionStorage.removeItem('token');
-      this._token.set(null);
       this._isLoggedIn.set(false);
       this.router.navigate(['/login']);
     });

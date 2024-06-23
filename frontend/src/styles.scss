@@ -102,18 +102,18 @@ $blue-palette: (
   )
 );
 
-$my-primary: mat.define-palette($teal-palette, 800);
-$my-accent: mat.define-palette($tan-palette, 200, 100, 400);
-$my-blue: mat.define-palette($blue-palette, 700);
-$my-red: mat.define-palette($red-palette, 500);
+$my-primary: mat.m2-define-palette($teal-palette, 800);
+$my-accent: mat.m2-define-palette($tan-palette, 200, 100, 400);
+$my-blue: mat.m2-define-palette($blue-palette, 700);
+$my-red: mat.m2-define-palette($red-palette, 500);
 
-$my-theme: mat.define-light-theme((
+$my-theme: mat.m2-define-light-theme((
   color: (
     primary: $my-primary,
     accent: $my-accent,
     warn: $my-red
   ),
-  typography: mat.define-typography-config($font-family: 'Poppins, system-ui, sans-serif'),
+  typography: mat.m2-define-typography-config($font-family: 'Poppins, system-ui, sans-serif'),
   density: 0
 ));
 

@@ -1,8 +1,8 @@
 export interface ILoginFormValue {
-  email: string;
+  username: string;
   password: string;
 }
 
 export interface ISignupFormValue extends ILoginFormValue {
-  username: string;
+  email: string;
 }
